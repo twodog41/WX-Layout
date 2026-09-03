@@ -1,0 +1,26 @@
+{
+  "name": "wx-layout",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-assisted, WeChat-compatible article layout toolkit",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "check": "pnpm --filter @wx-layout/core check && pnpm --filter @wx-layout/ai-layout check && pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build && pnpm --filter @wx-layout/api check && pnpm --filter @wx-layout/web check",
+    "dev": "concurrently -k -n api,web -c yellow,green \"pnpm --filter @wx-layout/api dev\" \"pnpm --filter @wx-layout/web dev\"",
+    "predev": "pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build",
+    "pretest": "pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build",
+    "test": "pnpm -r test",
+    "test:watch": "pnpm --filter @wx-layout/core test:watch"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "concurrently": "^9.2.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

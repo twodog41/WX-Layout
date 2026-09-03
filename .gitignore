@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.vite/
+.next/
+.vinext/
+.wrangler/
+*.log
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+apps/web/.local/
+.data/
+apps/api/.data/
