@@ -21,6 +21,9 @@
 - 0–100 创作自由度：低档只整理版式，高档允许精简改写并单独展示修改记录。
 - 内容筛查提示、配图位置与搜索词建议；默认使用聚合型 Openverse 开放图库，也可选 Pexels API，并保留来源署名。
 - 服务端 Responses API 和 OpenAI-compatible Chat Completions 适配。
+- “支持开发”微信支付弹窗、感谢文案与全站支持入口。
+- 基于 D1 的全球 ⭐ 计数；同一浏览器设备默认只能支持一次。
+- 可托管的 Sites 版本与 Windows 桌面安装包工程。
 
 ## 快速开始
 
@@ -49,6 +52,20 @@ pnpm check    # TypeScript 检查
 pnpm build    # 构建所有工作区
 ```
 
+## 发布网页与桌面程序
+
+托管版位于 `apps/site`，使用 Cloudflare D1 保存全球 ⭐ 计数；桌面版位于 `apps/desktop`，内置网页界面并连接同一托管 API。在线地址为 <https://wx-layout-studio.pengkunwang886.chatgpt.site>。完整发布说明见 [docs/publishing.md](docs/publishing.md)。
+
+在 Windows 上生成安装包：
+
+```bash
+pnpm --filter @wx-layout/desktop make
+```
+
+安装文件会生成到 `apps/desktop/out/`。桌面端默认连接当前公开站点，因此 AI、配图搜索和 ⭐ 会与网页使用同一套服务；自托管时可通过 `WX_LAYOUT_SERVICE_ORIGIN` 覆盖服务地址。仓库也包含按 `v*` 标签自动创建 GitHub Release 的 Windows 工作流。
+
+全站 ⭐ 通过随机设备标识去重，标识只保存在当前浏览器，不上传原始标识，服务端仅保存 SHA-256 摘要。这适合低门槛开源项目支持计数，但清除浏览器数据或更换设备后仍可再次点击；若将来要求严格的“一人一次”，应接入 GitHub 或微信登录后按账号去重。
+
 ## 使用核心包
 
 ```ts
@@ -67,6 +84,8 @@ console.log(result.issues);
 ```text
 apps/web/            Web/PWA 工作台
 apps/api/            本地 AI API 服务
+apps/site/           Sites 托管应用与 D1 API
+apps/desktop/        Windows Electron 桌面壳
 packages/ai-layout/  结构化 AI 排版协议和 Provider
 packages/core/       确定性微信排版内核
 docs/                架构和设计文档
@@ -83,6 +102,8 @@ examples/            兼容性示例文章
 - [x] 结构化 `LayoutPlan` AI 协议。
 - [x] Responses API / OpenAI-compatible Provider。
 - [x] 排版建议审查后应用。
+- [x] 支持开发弹窗、全站 ⭐ 计数与发布提示。
+- [x] 托管站点与 Windows 桌面打包工程。
 - [ ] CLI 和 GitHub Action。
 - [ ] 自托管公众号图片上传和草稿同步。
 

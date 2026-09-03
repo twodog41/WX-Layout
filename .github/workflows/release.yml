@@ -1,0 +1,41 @@
+name: Windows release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Type check
+        run: pnpm check
+      - name: Test
+        run: pnpm test
+      - name: Build Windows installer
+        run: pnpm --filter @wx-layout/desktop make
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $installer = Get-ChildItem -LiteralPath "apps/desktop/out" -Filter "WX-Layout-Setup-*.exe" | Select-Object -First 1
+          if (-not $installer) { throw "Windows installer was not generated." }
+          gh release create "${{ github.ref_name }}" "$($installer.FullName)" --generate-notes --title "WX Layout ${{ github.ref_name }}"

@@ -1,0 +1,49 @@
+{
+  "name": "@wx-layout/desktop",
+  "productName": "WX Layout",
+  "version": "0.1.2",
+  "description": "AI 辅助的微信公众号排版桌面应用",
+  "author": "WX Layout contributors",
+  "license": "Apache-2.0",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "build:renderer": "pnpm --filter @wx-layout/web exec vite build --outDir ../desktop/renderer --emptyOutDir",
+    "build:server": "pnpm exec esbuild ../api/src/app.ts --bundle --platform=node --format=cjs --target=node22 --outfile=server-bundle.cjs",
+    "prepare:app": "pnpm build:renderer && pnpm build:server",
+    "prestart": "pnpm prepare:app",
+    "start": "electron .",
+    "prepackage": "pnpm prepare:app",
+    "package": "electron-builder --dir",
+    "premake": "pnpm prepare:app",
+    "make": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^39.8.3",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.27.3"
+  },
+  "build": {
+    "appId": "io.github.wxlayout.desktop",
+    "productName": "WX Layout",
+    "asar": true,
+    "files": [
+      "main.cjs",
+      "server-bundle.cjs",
+      "renderer/**/*"
+    ],
+    "directories": {
+      "output": "out"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "WX-Layout-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

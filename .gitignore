@@ -14,3 +14,7 @@ coverage/
 apps/web/.local/
 .data/
 apps/api/.data/
+apps/desktop/out/
+apps/desktop/renderer/
+apps/desktop/server-bundle.cjs
+apps/site/*.tar.gz
