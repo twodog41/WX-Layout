@@ -1,118 +1,76 @@
 # WX Layout
 
-WX Layout 是一款面向微信公众号创作者的开源 AI 排版工作台，支持 Markdown 编辑、手机端实时预览、微信兼容富文本复制，以及可审查的 AI 排版建议。它能够拆分密集信息、重组标题与卡片层级、生成装饰元素和配图搜索建议，并通过“原稿 / AI 修改稿”对照与内容保真校验，让 AI 的每一次修改都清晰、可控。项目坚持本地优先：文章与草稿默认保存在用户设备中，API Key 不写入浏览器存储；同时提供网页版与 Windows 桌面版，适合校园、社团、媒体及个人创作者快速制作更清晰、更美观的公众号文章。
+WX Layout 是一款面向微信公众号创作者的开源 AI 排版工具。它支持 Markdown 编辑、手机端实时预览、微信兼容富文本复制和可审查的 AI 排版，适合校园、社团、媒体及个人创作者整理公众号文章。
 
-> 当前状态：可运行 MVP。确定性排版内核、结构化 AI 排版、三套主题、Web 工作台、富文本复制和兼容性检查已经可用；CLI、GitHub Action 和公众号草稿同步仍在路线图中。
+## 主要功能
 
-## 已实现
+- 将 Markdown 和 GFM 表格转换为微信公众号更容易保留的内联样式 HTML。
+- 提供多套主题，可调整字号、行高和主题色。
+- 支持在编辑区粘贴或选择 PNG、JPG、GIF、WebP 图片。
+- 在手机预览中实时查看文章效果，并检查链接、图片、表格和长代码等兼容性问题。
+- 使用 AI 拆分密集段落、整理标题层级、生成信息卡片、分隔线和静态装饰元素。
+- 并排展示原稿与 AI 修改稿，确认后再应用修改。
+- 通过“创作自由度”控制 AI 的发挥程度：低档以排版整理为主，高档允许适度精简和改写。
+- 根据文章内容建议配图位置和搜索词，可使用 Openverse 或 Pexels 查找候选图片。
+- 支持富文本复制、HTML 导出和本地草稿保存。
+- 提供网页版和 Windows 桌面版。
 
-- Markdown 和 GFM 表格解析。
-- 三套原创主题以及字号、行高、主题色调整。
-- 所有排版样式直接内联到 HTML 元素。
-- HTML 允许列表清洗，原始脚本不会进入结果。
-- 图片地址、非 HTTPS 链接、表格、长代码行和多 H1 检查。
-- 在 Markdown 编辑区通过 Ctrl+V 或文件选择器插入 PNG、JPG、GIF、WebP 图片（单张不超过 3 MB）。
-- 沙箱手机预览。
-- 同时写入 `text/html` 和 `text/plain` 的富文本复制。
-- HTML 导出和本地草稿保存。
-- Node.js 可复用核心包。
-- 结构化 AI `LayoutPlan`，支持密集段落拆分、短句层级、信息卡片、可审查改写、视觉标题和装饰分隔线。
-- AI 建议应用前以“原稿 / AI 修改稿”并排审查，并执行正文内容保真校验。
-- 0–100 创作自由度：低档只整理版式，高档允许精简改写并单独展示修改记录。
-- 内容筛查提示、配图位置与搜索词建议；默认使用聚合型 Openverse 开放图库，也可选 Pexels API，并保留来源署名。
-- 服务端 Responses API 和 OpenAI-compatible Chat Completions 适配。
-- “支持开发”微信支付弹窗、感谢文案与全站支持入口。
-- 基于 D1 的全球 ⭐ 计数；同一浏览器设备默认只能支持一次。
-- 可托管的 Sites 版本与 Windows 桌面安装包工程。
+## 本地运行
 
-## 快速开始
-
-要求 Node.js 22+ 和 pnpm 11+。
+需要 Node.js 22+ 和 pnpm 11+。
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-点击页面顶部的“AI 排版”即可打开配置面板。新手可以选择 OpenAI、DeepSeek 一键配置或兼容 API；DeepSeek 预设会自动填写官方地址、Responses 协议和推荐模型，只需输入 API Key。排版任务会关闭 DeepSeek 的深度思考并限制输出长度，保护性超时为 90 秒。生成完成后会同时展示原稿和 AI 修改稿，确认无误后点击“应用”。API Key 只保存在当前页面内存中。部署者也可以将 `.env.example` 复制为 `.env`，预设共享的服务端模型配置。
+启动后，打开终端显示的本地地址即可使用。
 
-AI 可以在不改写正文的前提下选择横幅、胶囊或下划线标题，卡片、提示或高亮内容块，以及线条、点线或双线分隔符。这些效果全部转换为微信公众号更容易保留的静态内联样式；不会添加通常会被公众号编辑器过滤的脚本动画。
+## 基本用法
 
-“创作自由度（温度）”默认是 35：AI 可以拆开堆叠的活动时间、地点和报名信息，整理成短句或信息卡片，但不会改写正文。超过 50 后允许精简或重写密集内容，结果会在审查窗口逐项列出原文和修改后文本；数字、日期、链接和邮箱会由本地校验器锁定。背景花纹使用带纯色回退的静态内联样式，即使花纹被发布平台过滤，正文仍然可读。
+1. 在中间的 Markdown 编辑区输入或粘贴文章。
+2. 在编辑区按 `Ctrl+V` 粘贴截图，或点击“添加图片”选择本地图片。右侧手机区域仅用于预览，不能直接编辑。
+3. 选择主题，并按需调整字号、行高和主题色。
+4. 如需 AI 辅助，点击页面顶部的“AI 排版”，配置模型后填写排版要求。
+5. AI 完成后，对照检查原稿和修改稿，确认无误再点击“应用”。
+6. 点击“复制到公众号”，进入微信公众平台的新建图文正文并按 `Ctrl+V` 粘贴。
+7. 粘贴后检查图片和格式，建议再使用公众号编辑器自带的一键排版功能统一格式。
 
-AI 只生成配图搜索词和插入位置，不会在后台自动发送整篇文章。审查窗口中点击“查找候选图”后才会访问图片服务。留空 Pexels Key 时使用聚合多个开放图库的 Openverse；若当前网络无法连接 Openverse，可在 AI 面板临时填写 Pexels API Key。该 Key 与模型 Key 一样只保存在当前页面内存中。选择图片后，缩略图会保存进本机图片库并附上作者与许可证来源；开放许可信息仍需在来源页核实，发布公众号时也建议在公众号编辑器内确认并重新上传图片。
+## AI 配置
 
-图片需要粘贴到中间的 Markdown 编辑区，右侧手机区域只是预览。图片数据保存在浏览器的本机图片库，Markdown 中只显示简短的 `wx-image://...` 引用；旧草稿里的 Base64 图片会在打开时自动迁移。编辑完成后点击“复制到公众号”，再进入 [微信公众平台](https://mp.weixin.qq.com/) 的新建图文正文中按 Ctrl+V。如果微信后台没有自动接收本机图片，应在公众号编辑器中重新上传原图并替换。页面右侧的“如何发布？”提供了同样的分步说明。
+AI 面板支持 OpenAI、DeepSeek 和 OpenAI-compatible 接口。
 
-然后访问终端显示的本地地址。常用命令：
+使用 DeepSeek 时，可选择 DeepSeek 预设，然后填写 API Key。默认配置为：
 
-```bash
-pnpm test     # 运行核心测试
-pnpm check    # TypeScript 检查
-pnpm build    # 构建所有工作区
+```text
+API 地址：https://api.deepseek.com
+模型 ID：deepseek-chat
 ```
 
-## 发布网页与桌面程序
+API Key 只保存在当前页面内存中，不会写入浏览器本地存储。生成排版建议时，文章内容会发送给你选择的模型服务商，请根据实际隐私要求使用。
 
-托管版位于 `apps/site`，使用 Cloudflare D1 保存全球 ⭐ 计数；桌面版位于 `apps/desktop`，内置网页界面并连接同一托管 API。在线地址为 <https://wx-layout-studio.pengkunwang886.chatgpt.site>。完整发布说明见 [docs/publishing.md](docs/publishing.md)。
+## 图片说明
 
-在 Windows 上生成安装包：
+本地图片会保存在当前浏览器的本机图片库中，Markdown 里只显示简短的 `wx-image://...` 引用。清除浏览器站点数据后，本地图片和草稿可能丢失，重要文章请及时导出备份。
+
+AI 只提供配图位置、搜索词和候选图片，不会自动发布文章。使用图库图片前，请在来源页面确认许可证和署名要求。若图片粘贴到公众号后没有正常显示，请在公众号编辑器中重新上传原图并替换。
+
+## 构建 Windows 安装包
 
 ```bash
 pnpm --filter @wx-layout/desktop make
 ```
 
-安装文件会生成到 `apps/desktop/out/`。桌面端默认连接当前公开站点，因此 AI、配图搜索和 ⭐ 会与网页使用同一套服务；自托管时可通过 `WX_LAYOUT_SERVICE_ORIGIN` 覆盖服务地址。仓库也包含按 `v*` 标签自动创建 GitHub Release 的 Windows 工作流。
-
-全站 ⭐ 通过随机设备标识去重，标识只保存在当前浏览器，不上传原始标识，服务端仅保存 SHA-256 摘要。这适合低门槛开源项目支持计数，但清除浏览器数据或更换设备后仍可再次点击；若将来要求严格的“一人一次”，应接入 GitHub 或微信登录后按账号去重。
-
-## 使用核心包
-
-```ts
-import { minimalBlueTheme, renderWechat } from "@wx-layout/core";
-
-const result = renderWechat("# 标题\n\n正文", {
-  theme: minimalBlueTheme
-});
-
-console.log(result.html);
-console.log(result.issues);
-```
-
-## 仓库结构
+生成的安装文件位于：
 
 ```text
-apps/web/            Web/PWA 工作台
-apps/api/            本地 AI API 服务
-apps/site/           Sites 托管应用与 D1 API
-apps/desktop/        Windows Electron 桌面壳
-packages/ai-layout/  结构化 AI 排版协议和 Provider
-packages/core/       确定性微信排版内核
-docs/                架构和设计文档
-examples/            兼容性示例文章
+apps/desktop/out/
 ```
 
-详细设计参见 [docs/architecture.md](docs/architecture.md)。
+## 常用命令
 
-## 路线图
-
-- [x] Markdown → 微信兼容内联 HTML。
-- [x] 主题 Token、手机预览和兼容性检查。
-- [x] 富文本复制和 HTML 导出。
-- [x] 结构化 `LayoutPlan` AI 协议。
-- [x] Responses API / OpenAI-compatible Provider。
-- [x] 排版建议审查后应用。
-- [x] 支持开发弹窗、全站 ⭐ 计数与发布提示。
-- [x] 托管站点与 Windows 桌面打包工程。
-- [ ] CLI 和 GitHub Action。
-- [ ] 自托管公众号图片上传和草稿同步。
-
-## 隐私
-
-文章和设置保存在浏览器本地。清除站点数据会删除草稿，请自行导出 Markdown 备份。API 服务不建立文章数据库，也不在应用日志中记录请求正文。
-
-只有用户主动生成排版建议时，本地 API 服务才会把必要的段落描述发送给所选择的模型服务商。面板填写的 API Key 只保存在当前页面内存，并随当次请求发送到本机 API 服务；不会写入 `localStorage`、仓库或渲染结果。部署者也可以改用服务端环境变量。默认 Responses 请求设置 `store: false`；模型服务商最终如何处理数据仍以其账户设置和服务条款为准。
-
-## 许可证
-
-Apache License 2.0。参见 [LICENSE](LICENSE)。
+```bash
+pnpm test     # 运行测试
+pnpm check    # TypeScript 检查
+pnpm build    # 构建全部工作区
+```
