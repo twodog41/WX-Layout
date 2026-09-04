@@ -737,7 +737,7 @@ export function App() {
         <div className="brand-block">
           <div className="brand-mark" aria-hidden="true">微</div>
           <div>
-            <p className="eyebrow">LOCAL-FIRST WECHAT LAYOUT</p>
+            <p className="eyebrow">微信公众号 AI 排版与手机预览工具</p>
             <h1>WX Layout</h1>
           </div>
         </div>
