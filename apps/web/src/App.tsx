@@ -1117,6 +1117,11 @@ export function App() {
               </label>
             </div>
 
+            <div className="api-key-warning" role="note" aria-label="API Key 安全提醒">
+              <span aria-hidden="true">!</span>
+              <p><strong>密钥安全提醒</strong>：建议使用为本工具单独创建、余额较低的 API Key，不要使用高额度主密钥；如发现异常调用，请立即在服务商后台吊销并更换。</p>
+            </div>
+
             <div className="setup-step second-step">
               <span className="step-number">2</span>
               <div>
@@ -1180,7 +1185,7 @@ export function App() {
             {aiError && <p className="panel-error" role="alert">{aiError}</p>}
             <div className="privacy-note">
               <span aria-hidden="true">◇</span>
-              <p><strong>隐私提示</strong>：API Key 仅随本次请求发送到你正在运行的本机服务，不写入浏览器存储；文章只会发送给你选择的模型服务商。</p>
+              <p><strong>隐私提示</strong>：API Key 仅在本次请求中经本站服务端临时转发给所选服务商，不写入浏览器存储；请仅使用服务商的官方 API 地址。</p>
             </div>
             <div className="ai-panel-actions">
               <button className="button secondary" type="button" disabled={aiState === "loading"} onClick={() => setAIPanelOpen(false)}>取消</button>

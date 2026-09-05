@@ -1283,6 +1283,44 @@ input[type="color"] {
   padding: 10px 12px;
 }
 
+.api-key-warning {
+  align-items: flex-start;
+  background: #fff3f1;
+  border: 1px solid #efc2ba;
+  border-left: 3px solid #c94b3c;
+  border-radius: 10px;
+  color: #7f4037;
+  display: flex;
+  font-size: 13px;
+  gap: 10px;
+  line-height: 1.6;
+  margin-top: 14px;
+  padding: 11px 12px;
+}
+
+.api-key-warning > span {
+  align-items: center;
+  background: #c94b3c;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  flex: 0 0 20px;
+  font-size: 13px;
+  font-weight: 800;
+  height: 20px;
+  justify-content: center;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.api-key-warning p {
+  margin: 0;
+}
+
+.api-key-warning strong {
+  color: #9f3124;
+}
+
 .ai-progress {
   align-items: center;
   background: #edf6ef;
