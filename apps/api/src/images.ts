@@ -12,6 +12,11 @@ export interface ImageCandidate {
   source: string;
 }
 
+export interface OpenImageSearchResult {
+  source: string;
+  images: ImageCandidate[];
+}
+
 interface CommonsMetadataValue {
   value?: unknown;
 }
@@ -174,6 +179,49 @@ export async function searchOpenverseImages(
       source: providerName ? `Openverse · ${providerName}` : "Openverse"
     }];
   });
+}
+
+export async function searchOpenImages(
+  query: string,
+  orientation: "landscape" | "portrait" | "square" = "landscape",
+  fetcher: typeof fetch = globalThis.fetch,
+  limit = 6
+): Promise<OpenImageSearchResult> {
+  const count = Math.max(1, Math.min(8, Math.round(limit)));
+  const failures: string[] = [];
+  let openverseImages: ImageCandidate[] = [];
+  let commonsImages: ImageCandidate[] = [];
+
+  try {
+    openverseImages = await searchOpenverseImages(query, orientation, fetcher, count);
+  } catch (error) {
+    failures.push(error instanceof Error ? error.message : "Openverse 图片服务不可用");
+  }
+
+  if (openverseImages.length < count) {
+    try {
+      commonsImages = await searchCommonsImages(query, fetcher, count - openverseImages.length);
+    } catch (error) {
+      failures.push(error instanceof Error ? error.message : "Wikimedia Commons 图片服务不可用");
+    }
+  }
+
+  const images = [...openverseImages, ...commonsImages]
+    .filter((image, index, candidates) => candidates.findIndex((candidate) => candidate.sourcePage === image.sourcePage) === index)
+    .slice(0, count);
+  const sources = [
+    openverseImages.length > 0 ? "Openverse" : "",
+    commonsImages.length > 0 ? "Wikimedia Commons" : ""
+  ].filter(Boolean);
+
+  if (images.length === 0 && failures.length >= 2) {
+    throw new Error("开放图库暂时不可用；可填写 Pexels API Key 后重试。");
+  }
+
+  return {
+    source: sources.join(" + ") || (failures.length === 0 ? "Openverse + Wikimedia Commons" : "Wikimedia Commons"),
+    images
+  };
 }
 
 export async function searchPexelsImages(

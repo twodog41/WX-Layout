@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchCommonsImage, searchCommonsImages, searchOpenverseImages, searchPexelsImages } from "./images.js";
+import { fetchCommonsImage, searchCommonsImages, searchOpenImages, searchOpenverseImages, searchPexelsImages } from "./images.js";
 
 describe("Wikimedia Commons image integration", () => {
   it("returns safe bitmap candidates with attribution metadata", async () => {
@@ -100,5 +100,36 @@ describe("Wikimedia Commons image integration", () => {
     });
     expect(String(fakeFetch.mock.calls[0]?.[0])).toContain("api.openverse.org/v1/images/");
     expect(String(fakeFetch.mock.calls[0]?.[0])).toContain("aspect_ratio=wide");
+  });
+
+  it("falls back to Wikimedia Commons when Openverse rejects the server", async () => {
+    const fakeFetch = vi.fn(async (input: URL | RequestInfo) => {
+      const url = new URL(String(input));
+      if (url.hostname === "api.openverse.org") return new Response("forbidden", { status: 403 });
+      return new Response(JSON.stringify({
+        query: {
+          pages: {
+            "7": {
+              pageid: 7,
+              title: "File:Fallback campus.jpg",
+              imageinfo: [{
+                url: "https://upload.wikimedia.org/fallback-campus.jpg",
+                thumburl: "https://upload.wikimedia.org/fallback-campus-960.jpg",
+                descriptionurl: "https://commons.wikimedia.org/wiki/File:Fallback_campus.jpg",
+                mime: "image/jpeg",
+                width: 1600,
+                height: 900
+              }]
+            }
+          }
+        }
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    });
+
+    const result = await searchOpenImages("university campus", "landscape", fakeFetch as typeof fetch, 6);
+
+    expect(result.source).toBe("Wikimedia Commons");
+    expect(result.images).toHaveLength(1);
+    expect(result.images[0]?.source).toBe("Wikimedia Commons");
   });
 });

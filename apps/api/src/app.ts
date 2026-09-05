@@ -5,7 +5,7 @@ import {
   type LayoutProvider
 } from "@wx-layout/ai-layout";
 import Fastify, { type FastifyInstance } from "fastify";
-import { fetchSupportedImage, searchOpenverseImages, searchPexelsImages } from "./images.js";
+import { fetchSupportedImage, searchOpenImages, searchPexelsImages } from "./images.js";
 import { FileStarStore, type StarStore } from "./stars.js";
 
 export interface AppOptions {
@@ -144,8 +144,8 @@ export function buildApp(options: AppOptions = {}): FastifyInstance {
       ? request.query.orientation
       : "landscape";
     try {
-      const images = await searchOpenverseImages(query, orientation, options.imageFetch ?? globalThis.fetch, limit);
-      return reply.send({ query, source: "Openverse", images });
+      const result = await searchOpenImages(query, orientation, options.imageFetch ?? globalThis.fetch, limit);
+      return reply.send({ query, ...result });
     } catch (error) {
       const message = error instanceof Error ? error.message : "配图搜索失败。";
       return reply.code(502).send(errorPayload("image_search_failed", message));

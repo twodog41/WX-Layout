@@ -1,4 +1,4 @@
-import { searchOpenverseImages, searchPexelsImages } from "../../../../lib/images";
+import { searchOpenImages, searchPexelsImages } from "../../../../lib/images";
 import { errorJson, json } from "../../../../lib/http";
 
 export async function GET(request: Request) {
@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const limit = Math.max(1, Math.min(8, Number.parseInt(params.get("limit") ?? "6", 10) || 6));
   const orientation = params.get("orientation") === "portrait" || params.get("orientation") === "square" ? params.get("orientation") as "portrait" | "square" : "landscape";
   try {
-    return json({ query, source: "Openverse", images: await searchOpenverseImages(query, orientation, fetch, limit) });
+    return json({ query, ...await searchOpenImages(query, orientation, fetch, limit) });
   } catch (error) {
     return errorJson("image_search_failed", error instanceof Error ? error.message : "配图搜索失败。", 502);
   }
