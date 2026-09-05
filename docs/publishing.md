@@ -12,7 +12,7 @@ WX Layout 有两个分发面：在线站点和 Windows 桌面程序。在线站�
 安装命令：pnpm install --frozen-lockfile
 构建命令：pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build && pnpm build
 输出目录：.next
-Node.js：22.11.0
+Node.js：22.17.1
 生产分支：main
 ```
 

@@ -3,7 +3,7 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build && pnpm build",
   "outputDirectory": ".next",
-  "nodeVersion": "22.11.0",
+  "nodeVersion": "22.17.1",
   "cloudFunctions": {
     "maxDuration": 120
   },
