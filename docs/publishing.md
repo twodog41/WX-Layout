@@ -9,8 +9,8 @@ WX Layout 有两个分发面：在线站点和 Windows 桌面程序。在线站�
 ```text
 项目根目录：apps/site
 框架：Next.js
-安装命令：pnpm --dir ../.. install --frozen-lockfile
-构建命令：pnpm --dir ../.. --filter @wx-layout/core build && pnpm --dir ../.. --filter @wx-layout/ai-layout build && pnpm build
+安装命令：pnpm install --frozen-lockfile
+构建命令：pnpm --filter @wx-layout/core build && pnpm --filter @wx-layout/ai-layout build && pnpm build
 输出目录：.next
 Node.js：22.11.0
 生产分支：main
