@@ -1,1 +1,1 @@
-export { fetchSupportedImage, searchOpenverseImages, searchPexelsImages } from "../../api/src/images.js";
+export { fetchSupportedImage, searchOpenverseImages, searchPexelsImages } from "../../api/src/images";

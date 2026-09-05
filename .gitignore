@@ -5,6 +5,7 @@ coverage/
 .next/
 .vinext/
 .wrangler/
+.edgeone/
 *.log
 *.tsbuildinfo
 .DS_Store

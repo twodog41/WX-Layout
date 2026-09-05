@@ -5,7 +5,7 @@ const path = require("node:path");
 const { buildApp } = require("./server-bundle.cjs");
 
 const SERVICE_ORIGIN = process.env.WX_LAYOUT_SERVICE_ORIGIN
-  || "https://wx-layout-studio.pengkunwang886.chatgpt.site";
+  || "https://wxlayout.cn";
 const RENDERER_ROOT = path.join(__dirname, "renderer");
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",

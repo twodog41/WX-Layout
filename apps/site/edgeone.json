@@ -1,0 +1,19 @@
+{
+  "name": "wx-layout",
+  "installCommand": "pnpm --dir ../.. install --frozen-lockfile",
+  "buildCommand": "pnpm --dir ../.. --filter @wx-layout/core build && pnpm --dir ../.. --filter @wx-layout/ai-layout build && pnpm build",
+  "outputDirectory": ".next",
+  "nodeVersion": "22.11.0",
+  "cloudFunctions": {
+    "nodejs": {
+      "maxDuration": 120
+    }
+  },
+  "redirects": [
+    {
+      "source": "$wwwhost",
+      "destination": "$host",
+      "statusCode": 301
+    }
+  ]
+}

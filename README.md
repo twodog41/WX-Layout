@@ -26,6 +26,10 @@ pnpm dev
 
 启动后，打开终端显示的本地地址即可使用。
 
+## 部署网页
+
+线上版本使用 EdgeOne Makers 托管。站点工程位于 `apps/site`，以该目录作为项目根目录导入 GitHub 仓库即可自动构建；详细配置见 `docs/publishing.md`。
+
 ## 基本用法
 
 1. 在中间的 Markdown 编辑区输入或粘贴文章。
